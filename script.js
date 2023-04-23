@@ -1,80 +1,62 @@
-let feet    =document.getElementById("feet");
-let meter   =document.getElementById("meter");
-let inch    =document.getElementById("inches");
-let cm      =document.getElementById("cm");
-let yard    =document.getElementById("yards");
-let km      =document.getElementById("km");
-let mile    =document.getElementById("miles");
+window.addEventListener('load', () => {
+	const form = document.querySelector("#new-task-form");
+	const input = document.querySelector("#new-task-input");
+	const list_el = document.querySelector("#tasks");
 
-function feetToOther(val){
-    meter.value =  val/3.2808; 
-    inch.value =  val*12;   
-    cm.value    =  val/0.032808; 
-    yard.value  =  val*0.33333;  
-    km.value    =  val/3280.8; 
-    mile.value  =  val*0.00018939;       
-}
-function meterToOther(val){
-    feet.value = val*3.2808;
-    inch.value = val*39.370;  
-    cm.value   = val/0.01;
-    yard.value = val*1.0936; 
-    km.value   = val/1000;
-    mile.value = val*0.00062137;
-}
-function inchesToOther(val){
-    feet.value = val*0.083333;
-    meter.value = val/39.370;  
-    cm.value = val/0.39370;
-    yard.value = val*0.027778; 
-    km.value = val/39370;
-    mile.value = val*0.000015783;
-}
-function cmToOther(val){
-    feet.value = val*0.032808;
-    meter.value = val/100;  
-    inch.value = val*0.39370;
-    yard.value = val*0.010936; 
-    km.value = val/100000 ;
-    mile.value = val*0.0000062137;
-}
-function yardsToOther(val){
-    feet.value = val*3;
-    inch.value = val*36;  
-    cm.value = val/0.010936;
-    meter.value = val/1.0936; 
-    km.value = val/1093.6;
-    mile.value = val*0.00056818;
-}
-function kmToOther(val){
-    feet.value = val*3280.8;
-    inch.value = val*39370;  
-    cm.value = val*100000;
-    yard.value = val*1093.6; 
-    meter.value = val*1000;
-    mile.value = val*0.62137;
-}
-function milesToOther(val){
-    feet.value = val*5280;
-    inch.value = val*63360;  
-    cm.value = val/0.0000062137;
-    yard.value = val*1760; 
-    km.value = val/0.62137;
-    meter.value = val/0.00062137;
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
 
-}
-// *********************//
+		const task = input.value;
 
+		const task_el = document.createElement('div');
+		task_el.classList.add('task');
 
+		const task_content_el = document.createElement('div');
+		task_content_el.classList.add('content');
 
-function convertToOthers(convertFrom,value){    
-    switch(convertFrom){
-        case "feet" : feetToOther (parseFloat(value)); break;
-        case "meter": meterToOther(parseFloat(value)); break;
-        case "inch" : inchesToOther(parseFloat(value)); break;
-        case "cm"   : cmToOther(parseFloat(value)); break;
-        case "yard" : yardsToOther (parseFloat(value)); break;
-        case "km"   : kmToOther (parseFloat(value)); break;
-        case "mile" : milesToOther(parseFloat(value)); break;
-    }
-}
+		task_el.appendChild(task_content_el);
+
+		const task_input_el = document.createElement('input');
+		task_input_el.classList.add('text');
+		task_input_el.type = 'text';
+		task_input_el.value = task;
+		task_input_el.setAttribute('readonly', 'readonly');
+
+		task_content_el.appendChild(task_input_el);
+
+		const task_actions_el = document.createElement('div');
+		task_actions_el.classList.add('actions');
+
+		const task_edit_el = document.createElement('button');
+		task_edit_el.classList.add('edit');
+		task_edit_el.innerText = 'Edit';
+
+		const task_delete_el = document.createElement('button');
+		task_delete_el.classList.add('delete');
+		task_delete_el.innerText = 'Delete';
+
+		task_actions_el.appendChild(task_edit_el);
+		task_actions_el.appendChild(task_delete_el);
+
+		task_el.appendChild(task_actions_el);
+
+		list_el.appendChild(task_el);
+
+		input.value = '';
+
+		task_edit_el.addEventListener('click', (e) => {
+			if (task_edit_el.innerText.toLowerCase() == "edit") {
+				task_edit_el.innerText = "Save";
+				task_input_el.removeAttribute("readonly");
+				task_input_el.focus();
+			} else {
+				task_edit_el.innerText = "Edit";
+				task_input_el.setAttribute("readonly", "readonly");
+			}
+		});
+
+		task_delete_el.addEventListener('click', (e) => {
+			list_el.removeChild(task_el);
+		});
+	});
+});
